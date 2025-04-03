@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     const userId = req.query.userId;
+    // fetch summary for the user from the database and return results
     res.json({
         userId,
         totalPlants: 10,
