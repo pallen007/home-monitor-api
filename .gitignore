@@ -14,7 +14,9 @@ lerna-debug.log*
 
 
 # Dependencies
-node-modules
+node-modules/
+node_modules
+node_modules/**
 
 # Build output
 dist/
