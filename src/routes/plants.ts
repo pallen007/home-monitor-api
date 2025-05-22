@@ -3,7 +3,7 @@ import Plant, { IPlant } from '../models/Plant';
 
 const router = express.Router();
 
-// TODO: add user ID filter to all routes
+// TODO: review Copilot edits for this file and make sure they are correct before applying
 // Get plants by IDs
 router.get('/collection/:userId', async (req, res) => {
     // refactor this to use the userId from the request params and filter all plants belonging to that user
