@@ -37,11 +37,21 @@ describe('Plant API', () => {
         }
     };
 
-    test('PUT /api/plants/:id should create or update a plant', async () => {
+    test('POST /api/plants should create a new plant in a user collection', async () => {
         const response = await request(app)
-            .put('/api/plants/1')
+            .post('/api/plants')
             .send(testPlant);
-        
+
+        expect(response.status).toBe(201);
+        expect(response.body.nickName).toBe(testPlant.nickName);
+        expect(response.body.userId).toBe(testPlant.userId);
+    });
+
+    test('PUT /api/plants/:userId/:id should create or update a plant for a user', async () => {
+        const response = await request(app)
+            .put('/api/plants/user123/1')
+            .send(testPlant);
+
         expect(response.status).toBe(200);
         expect(response.body.nickName).toBe(testPlant.nickName);
     });
@@ -51,10 +61,20 @@ describe('Plant API', () => {
 
         const response = await request(app)
             .get('/api/plants/collection/user123');
-        
+
         expect(response.status).toBe(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].nickName).toBe(testPlant.nickName);
+    });
+
+    test('DELETE /api/plants/:userId/:id should remove a plant from a users collection', async () => {
+        await Plant.create(testPlant);
+
+        const response = await request(app)
+            .delete('/api/plants/user123/1');
+
+        expect(response.status).toBe(200);
+        expect(response.body.deleted).toBe(true);
     });
 });
 

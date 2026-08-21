@@ -2,49 +2,47 @@ import express from 'express';
 import Plant from '../models/Plant';
 import SensorData from '../models/SensorData';
 
-const router = express.Router();
+const router: any = (express as any).Router();
 
-router.get('/', async (req, res) => {
+router.get('/', (req: any, res: any) => {
     const userId = req.query.userId?.toString();
     if (!userId) {
         return res.status(400).json({ error: 'userId is required' });
     }
 
-    try {
-        const plants = await Plant.find({ userId });
-        const totalPlants = plants.length;
+    Plant.find({ userId })
+        .then((plants) => {
+            const totalPlants = plants.length;
+            const plantIds = plants.map((p) => p.id);
 
-        // Get latest sensor data for all plants
-        const plantIds = plants.map(p => p.id);
-        const sensorData = await Promise.all(
-            plantIds.map(id => 
-                SensorData.findOne({ plantId: id })
-                    .sort({ timestamp: -1 })
-                    .limit(1)
-            )
-        );
+            return Promise.all(
+                plantIds.map((id) =>
+                    SensorData.findOne({ plantId: id }).sort({ timestamp: -1 }).limit(1)
+                )
+            ).then((sensorData) => ({ plants, totalPlants, sensorData }));
+        })
+        .then(({ plants, totalPlants, sensorData }) => {
+            const needsAttention = plants.filter((plant, index) => {
+                const sensor = sensorData[index];
+                if (!sensor) return false;
 
-        // Count plants needing attention (low moisture or outside ideal temperature range)
-        const needsAttention = plants.filter((plant, index) => {
-            const sensor = sensorData[index];
-            if (!sensor) return false;
+                const moistureNeedsAttention = plant.idealMoistureLevel &&
+                    sensor.moistureLevel < plant.idealMoistureLevel;
 
-            const moistureNeedsAttention = plant.idealMoistureLevel && 
-                sensor.moistureLevel < plant.idealMoistureLevel;
+                return moistureNeedsAttention;
+            }).length;
 
-            return moistureNeedsAttention;
-        }).length;
-
-        res.json({
-            userId,
-            totalPlants,
-            healthyPlants: totalPlants - needsAttention,
-            needsAttention,
+            res.json({
+                userId,
+                totalPlants,
+                healthyPlants: totalPlants - needsAttention,
+                needsAttention,
+            });
+        })
+        .catch((error) => {
+            console.error('Error fetching summary stats:', error);
+            res.status(500).json({ error: 'Failed to fetch summary stats' });
         });
-    } catch (error) {
-        console.error('Error fetching summary stats:', error);
-        res.status(500).json({ error: 'Failed to fetch summary stats' });
-    }
 });
 
 export default router;
