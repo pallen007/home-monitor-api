@@ -2,29 +2,30 @@
   "name": "home-monitor-api",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pallen007/home-monitor-api.git"
+  },
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": ["<rootDir>/src/__tests__/setup.ts"]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@types/jest": "^29.5.14",
     "@types/mongoose": "^5.11.96",
     "@types/supertest": "^6.0.3",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "jest": "^29.7.0",
+    "vitest": "^3.0.9",
     "mongoose": "^8.13.1",
     "supertest": "^7.1.1"
   },
@@ -32,6 +33,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.0",
+    "mongodb-memory-server": "^11.3.0",
     "nodemon": "^3.1.9",
     "typescript": "^5.8.2"
   }
