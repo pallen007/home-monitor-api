@@ -2,6 +2,11 @@
   "name": "home-monitor-api",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pallen007/home-monitor-api.git"
+  },
+  "private": true,
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -28,7 +33,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.0",
-    "mongodb-memory-server": "^10.1.2",
+    "mongodb-memory-server": "^11.3.0",
     "nodemon": "^3.1.9",
     "typescript": "^5.8.2"
   }
