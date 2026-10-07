@@ -21,6 +21,9 @@ node_modules/**
 # Build output
 dist/
 
+# Local API credentials
+credentials.json
+
 # Code coverage
 coverage/
 *.lcov
