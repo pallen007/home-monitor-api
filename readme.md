@@ -1,3 +1,7 @@
+# Deprecation notice
+This project has been deprecated, and the implementation moved to the monorepo project /HomeMonitor
+
+
 # Purpose 
 This is a NodeJS API for the home monitor system, for interacting with a user's database
 
